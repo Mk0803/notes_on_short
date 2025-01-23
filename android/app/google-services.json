@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "670594355601",
+    "project_id": "notesonshort-a1980",
+    "storage_bucket": "notesonshort-a1980.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670594355601:android:b35a1873b57a59487e0a30",
+        "android_client_info": {
+          "package_name": "com.example.notes_on_short"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa-2G5DW2cIA6oZm3QBXL4OYYchACzUSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
