@@ -137,14 +137,14 @@ class _LoginPageState extends State<LoginPage> {
                   MyTextField(
                       controller: userEmailController,
                       hintText: "Email",
-                      obscureText: false),
+                      isPassword: false),
                   SizedBox(
                     height: 10,
                   ),
                   MyTextField(
                     controller: userPasswordController,
                     hintText: "Password",
-                    obscureText: true,
+                    isPassword: true,
                   ),
                   SizedBox(
                     height: 10,
