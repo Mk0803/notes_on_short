@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_short/Utils/button.dart';
+import 'package:notes_on_short/Utils/google_sign_in_button.dart';
 import 'package:notes_on_short/Utils/text_field.dart';
 import 'package:notes_on_short/auth/auth_service.dart';
 
@@ -15,7 +16,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController userEmailController = TextEditingController();
-
   final TextEditingController userPasswordController = TextEditingController();
   final TextEditingController userConfirmPasswordController =
       TextEditingController();
@@ -27,74 +27,85 @@ class _RegisterPageState extends State<RegisterPage> {
     if (userEmailController.text.isEmpty ||
         userPasswordController.text.isEmpty ||
         userConfirmPasswordController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Missing Information"),
-            content: Text("Please enter email, password and confirm password."),
-          );
-        },
-      );
-      return; // Exit the function
+      showErrorMessage("Please enter email, password, and confirm password.");
+      return;
+    }
+
+    if (userPasswordController.text != userConfirmPasswordController.text) {
+      showErrorMessage("Passwords do not match.");
+      return;
     }
 
     // Show CircularProgressIndicator
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent dismissing by tapping outside
+      barrierDismissible: false,
       builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const Center(child: CircularProgressIndicator());
       },
     );
 
     try {
-      if (userPasswordController.text == userConfirmPasswordController.text) {
-        await authService.signUpWithEmailPassword(
-          userEmailController.text.trim(),
-          userPasswordController.text.trim(),
-        );
-      } else {
-        showErrorMessage("Password and Confirm Password should be same");
-      }
+      await authService.signUpWithEmailPassword(
+        userEmailController.text.trim(),
+        userPasswordController.text.trim(),
+      );
 
       Navigator.pop(context); // Close CircularProgressIndicator
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Registration Successful!")),
+      );
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context); // Close CircularProgressIndicator
-      // Handle specific Firebase exceptions
-      if (e.code == 'user-not-found') {
-        showErrorMessage("Invalid Email");
-      } else if (e.code == 'wrong-password') {
-        showErrorMessage("Wrong Password");
+      if (e.code == 'email-already-in-use') {
+        showErrorMessage("This email is already in use.");
+      } else if (e.code == 'invalid-email') {
+        showErrorMessage("Invalid email format.");
+      } else if (e.code == 'weak-password') {
+        showErrorMessage("Password should be at least 6 characters.");
+      } else {
+        showErrorMessage(e.message ?? "An unknown error occurred.");
       }
     } catch (e) {
       Navigator.pop(context); // Close CircularProgressIndicator
-      // Handle any other errors
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Text(e.toString()),
-          );
-        },
-      );
+      showErrorMessage("An unexpected error occurred: $e");
+    }
+  }
+
+  void signInWithGoogle(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    try {
+      final userCredential = await authService.signInWithGoogle(context);
+      Navigator.pop(context); // Close CircularProgressIndicator
+      if (userCredential != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Google Sign-In Successful!")),
+        );
+      }
+    } catch (e) {
+      Navigator.pop(context); // Close CircularProgressIndicator
+      showErrorMessage("Google Sign-In Failed: $e");
     }
   }
 
   void showErrorMessage(String error) {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(error),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(error),
+        );
+      },
+    );
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -118,89 +129,73 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     "Notes On Short",
                     style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary),
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                    ),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     "Create an Account",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   MyTextField(
-                      controller: userEmailController,
-                      hintText: "Email",
-                      isPassword: false),
-                  SizedBox(
-                    height: 10,
+                    controller: userEmailController,
+                    hintText: "Email",
+                    isPassword: false,
                   ),
+                  const SizedBox(height: 10),
                   MyTextField(
                     controller: userPasswordController,
                     hintText: "Password",
                     isPassword: true,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   MyTextField(
                     controller: userConfirmPasswordController,
                     hintText: "Confirm Password",
                     isPassword: true,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   Button(text: "Register", onTap: () => register(context)),
-                  SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                            child: Divider(
-                          thickness: 0.8,
-                        )),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                        const Expanded(child: Divider(thickness: 0.8)),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Text("Or Continue with"),
                         ),
-                        Expanded(
-                            child: Divider(
-                          thickness: 0.8,
-                        ))
+                        const Expanded(child: Divider(thickness: 0.8)),
                       ],
                     ),
                   ),
-                  Button(text: "Google", onTap: () {}),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  GoogleSignInButton(onTap: () => signInWithGoogle(context)),
+                  
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Already a Member? "),
+                        const Text("Already a Member? "),
                         GestureDetector(
                           onTap: widget.onTap,
-                          child: Text(
+                          child: const Text(
                             "Login",
                             style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
