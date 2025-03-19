@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:notes_on_short/Pages/auth_page.dart';
-import 'package:notes_on_short/models/notes_repository.dart';
-import 'package:notes_on_short/themes/theme_provider.dart';
+import 'package:notes_on_short/features/authentication/controllers/auth_page.dart';
+import 'package:notes_on_short/features/notes/controllers/notes_repository.dart';
+import 'package:notes_on_short/utils/themes/theme_provider.dart';
+import 'package:notes_on_short/utils/logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
+import 'data/services/firebase_options.dart';
 import 'package:isar/isar.dart';
-import 'models/note.dart'; // Import the Note model
-import 'package:path_provider/path_provider.dart';
+
 
 
 late final Isar isar;
@@ -16,12 +16,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotesRepository.initialize();
 
-  // Firebase initialization
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  AppLogger.i("Initialized Apk");
 
-  // Isar initialization
+  
   
 
   runApp(
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: AuthPage(), // Initial page
+      home: AuthPage(), 
     );
   }
 }

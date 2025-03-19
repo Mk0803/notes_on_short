@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_short/Utils/button.dart';
-import 'package:notes_on_short/Utils/google_sign_in_button.dart';
-import 'package:notes_on_short/Utils/text_field.dart';
-import 'package:notes_on_short/auth/auth_service.dart';
+import 'package:notes_on_short/common/widgets/button.dart';
+import 'package:notes_on_short/common/widgets/google_sign_in_button.dart';
+import 'package:notes_on_short/common/widgets/text_field.dart';
+import 'package:notes_on_short/features/authentication/controllers/auth_service.dart';
+import 'package:notes_on_short/features/authentication/controllers/email_auth.dart';
+import 'package:notes_on_short/features/authentication/controllers/google_auth.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -20,102 +21,11 @@ class _LoginPageState extends State<LoginPage> {
 
   final AuthService authService = AuthService();
 
-  void login(BuildContext context) async {
-    if (userEmailController.text.isEmpty ||
-        userPasswordController.text.isEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Missing Information"),
-            content: Text("Please enter both email and password."),
-          );
-        },
-      );
-      return;
-    }
+  
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+  
 
-    try {
-      await authService.signInWithEmailPassword(
-        userEmailController.text.trim(),
-        userPasswordController.text.trim(),
-      );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      if (e.code == 'user-not-found') {
-        wrongEmailMessage();
-      } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Text(e.toString()),
-          );
-        },
-      );
-    }
-  }
 
-  void signInWithGoogle(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
-    try {
-      final userCredential = await authService.signInWithGoogle(context);
-      Navigator.pop(context); // Close CircularProgressIndicator
-      if (userCredential != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Google Sign-In Successful")),
-        );
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Google Sign-In Failed: $e")),
-      );
-    }
-  }
-
-  void wrongEmailMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("Wrong Email"),
-        );
-      },
-    );
-  }
-
-  void wrongPasswordMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("Wrong Password"),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: const [Text("Forgot Password")],
                     ),
                   ),
-                  Button(text: "Login", onTap: () => login(context)),
+                  Button(text: "Login", onTap: () => EmailAuth().login(context, userEmailController, userPasswordController)),
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -188,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  GoogleSignInButton(onTap: () => signInWithGoogle(context)),
+                  GoogleSignInButton(onTap: () => GoogleAuth().signInWithGoogle(context)),
                   
                   const SizedBox(height: 10),
                   Padding(

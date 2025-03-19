@@ -27,7 +27,7 @@ class GoogleSignInButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0), // Adjust padding for better spacing
           child: Image.asset(
-            'lib/images/google_login.png',
+            'assets/images/google_login.png',
             fit: BoxFit.contain,
           ),
         ),

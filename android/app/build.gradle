@@ -1,13 +1,13 @@
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services' // FlutterFire Configuration
+    id 'com.google.gms.google-services' 
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
 android {
     namespace "com.example.notes_on_short"
-    compileSdk = 34 // Explicitly set to the latest version
+    compileSdk = 34 
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

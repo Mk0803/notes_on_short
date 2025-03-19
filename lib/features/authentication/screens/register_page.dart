@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_short/Utils/button.dart';
-import 'package:notes_on_short/Utils/google_sign_in_button.dart';
-import 'package:notes_on_short/Utils/text_field.dart';
-import 'package:notes_on_short/auth/auth_service.dart';
+import 'package:notes_on_short/common/widgets/button.dart';
+import 'package:notes_on_short/common/widgets/google_sign_in_button.dart';
+import 'package:notes_on_short/common/widgets/text_field.dart';
+import 'package:notes_on_short/features/authentication/controllers/auth_service.dart';
+
+import '../controllers/email_auth.dart';
+import '../controllers/google_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -21,91 +23,8 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   final authService = AuthService();
-
-  void register(BuildContext context) async {
-    // Check for empty email or password fields
-    if (userEmailController.text.isEmpty ||
-        userPasswordController.text.isEmpty ||
-        userConfirmPasswordController.text.isEmpty) {
-      showErrorMessage("Please enter email, password, and confirm password.");
-      return;
-    }
-
-    if (userPasswordController.text != userConfirmPasswordController.text) {
-      showErrorMessage("Passwords do not match.");
-      return;
-    }
-
-    // Show CircularProgressIndicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
-    try {
-      await authService.signUpWithEmailPassword(
-        userEmailController.text.trim(),
-        userPasswordController.text.trim(),
-      );
-
-      Navigator.pop(context); // Close CircularProgressIndicator
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Registration Successful!")),
-      );
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context); // Close CircularProgressIndicator
-      if (e.code == 'email-already-in-use') {
-        showErrorMessage("This email is already in use.");
-      } else if (e.code == 'invalid-email') {
-        showErrorMessage("Invalid email format.");
-      } else if (e.code == 'weak-password') {
-        showErrorMessage("Password should be at least 6 characters.");
-      } else {
-        showErrorMessage(e.message ?? "An unknown error occurred.");
-      }
-    } catch (e) {
-      Navigator.pop(context); // Close CircularProgressIndicator
-      showErrorMessage("An unexpected error occurred: $e");
-    }
-  }
-
-  void signInWithGoogle(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
-    try {
-      final userCredential = await authService.signInWithGoogle(context);
-      Navigator.pop(context); // Close CircularProgressIndicator
-      if (userCredential != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Google Sign-In Successful!")),
-        );
-      }
-    } catch (e) {
-      Navigator.pop(context); // Close CircularProgressIndicator
-      showErrorMessage("Google Sign-In Failed: $e");
-    }
-  }
-
-  void showErrorMessage(String error) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(error),
-        );
-      },
-    );
-  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     isPassword: true,
                   ),
                   const SizedBox(height: 20),
-                  Button(text: "Register", onTap: () => register(context)),
+                  Button(text: "Register", onTap: () => EmailAuth().register(context, userEmailController, userPasswordController, userConfirmPasswordController)),
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -174,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  GoogleSignInButton(onTap: () => signInWithGoogle(context)),
+                  GoogleSignInButton(onTap: () => GoogleAuth().signInWithGoogle(context)),
                   
                   const SizedBox(height: 10),
                   Padding(

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:notes_on_short/models/note.dart';
+import 'package:notes_on_short/features/notes/models/note.dart';
+import 'package:notes_on_short/utils/logger/logger.dart';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -71,21 +72,21 @@ class NotesRepository extends ChangeNotifier {
 
     // If there is no internet connectivity, skip sync
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      print('No internet connectivity. Sync deferred.');
+      AppLogger.i('No internet connectivity. Sync deferred.');
       return;
     }
 
     // Verify actual internet access
     final bool hasInternet = await hasInternetAccess();
     if (!hasInternet) {
-      print('Internet access detected, but no actual access available. Sync deferred.');
+      AppLogger.i('Internet access detected, but no actual access available. Sync deferred.');
       return;
     }
 
     // Fetch local notes
     final List<Note> localNotes = await getNotes();
     if (localNotes.isEmpty) {
-      print('No local notes to sync.');
+      AppLogger.i('No local notes to sync.');
       return;
     }
 
@@ -109,18 +110,18 @@ class NotesRepository extends ChangeNotifier {
             await isar.notes.put(note); // Update sync status
           });
 
-          print('Note synced to Firebase: ${note.id}');
+          AppLogger.i('Note synced to Firebase: ${note.id}');
         } catch (e) {
-          print('Failed to sync note ${note.id} with Firebase: $e');
+          AppLogger.i('Failed to sync note ${note.id} with Firebase: $e');
           // Optionally, log the error to a remote logging service
         }
       }
     }
 
-    print('Sync completed successfully.');
+    AppLogger.i('Sync completed successfully.');
   } catch (e) {
     // Handle unexpected errors
-    print('An unexpected error occurred during sync: $e');
+    AppLogger.i('An unexpected error occurred during sync: $e');
     // Optionally, log the error to a remote logging service
   }
 }
@@ -136,13 +137,13 @@ class NotesRepository extends ChangeNotifier {
       // Check if the device is connected to the internet
       final hasInternet = await hasInternetAccess();
       if (hasInternet) {
-        print('Connected to the internet. Syncing notes...');
+        AppLogger.i('Connected to the internet. Syncing notes...');
         await syncNotes();  // Attempt syncing when back online
       } else {
-        print('Internet access detected, but no actual access available. Sync deferred.');
+        AppLogger.i('Internet access detected, but no actual access available. Sync deferred.');
       }
     } else {
-      print('Disconnected from the internet. Sync deferred.');
+      AppLogger.i('Disconnected from the internet. Sync deferred.');
     }
   });
 }
@@ -157,13 +158,13 @@ class NotesRepository extends ChangeNotifier {
     while (retryCount < retries) {
       try {
         await syncNotes();
-        print('Sync successful.');
+        AppLogger.i('Sync successful.');
         break;
       } catch (e) {
         retryCount++;
-        print('Sync failed. Retrying... ($retryCount/$retries)');
+        AppLogger.i('Sync failed. Retrying... ($retryCount/$retries)');
         if (retryCount == retries) {
-          print('Failed to sync after $retries attempts.');
+          AppLogger.i('Failed to sync after $retries attempts.');
         }
         await Future.delayed(const Duration(seconds: 2));
       }
