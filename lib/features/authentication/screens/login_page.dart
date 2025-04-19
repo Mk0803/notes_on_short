@@ -21,12 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final AuthService authService = AuthService();
 
-  
-
-  
-
-
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -78,7 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                       children: const [Text("Forgot Password")],
                     ),
                   ),
-                  Button(text: "Login", onTap: () => EmailAuth().login(context, userEmailController, userPasswordController)),
+                  Button(
+                      text: "Login",
+                      onTap: () => EmailAuth().login(context,
+                          userEmailController, userPasswordController)),
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -98,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  GoogleSignInButton(onTap: () => GoogleAuth().signInWithGoogle(context)),
-                  
+                  GoogleSignInButton(
+                      onTap: () => GoogleAuth().signInWithGoogle(context)),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -112,7 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text(
                             "Register Now",
                             style: TextStyle(
-                                color: Colors.blue, fontWeight: FontWeight.bold),
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],

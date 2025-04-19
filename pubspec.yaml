@@ -39,7 +39,7 @@ dependencies:
   google_sign_in: ^6.2.2
   provider: ^6.1.2
   isar: ^3.1.0+1
-  isar_flutter_libs: 3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.1.5
   cloud_firestore: ^5.6.2
   connectivity_plus: ^6.1.2
@@ -49,7 +49,7 @@ dependencies:
 
 dev_dependencies:
   isar_generator: ^3.1.0+1
-  build_runner: ^2.4.13
+  build_runner: any
   flutter_test:
     sdk: flutter
 
