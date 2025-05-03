@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Notes On Short",
+                    "Notes",
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,

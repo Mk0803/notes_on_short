@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:notes_on_short/features/authentication/screens/auth_page.dart';
 import 'package:notes_on_short/features/notes/services/notes_repository.dart';
@@ -11,30 +12,34 @@ import 'features/notes/controllers/home_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final notesRepository = NotesRepository();
   await notesRepository.initialize();
-
   notesRepository.pullMissingCloudNotes();
 
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ThemeProvider()),
-          ChangeNotifierProvider.value(value: notesRepository),
-          ChangeNotifierProvider<HomeController>(
-            create: (context) => HomeController(
-              notesRepository: Provider.of<NotesRepository>(context, listen: false),
-            ),
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider.value(value: notesRepository),
+        ChangeNotifierProvider<HomeController>(
+          create: (context) => HomeController(
+            notesRepository: Provider.of<NotesRepository>(context, listen: false),
           ),
-        ],
-        child: const MyApp(),
-      ),
-    );
+        ),
+      ],
+      child: const NotesApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class NotesApp extends StatelessWidget {
+  const NotesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
