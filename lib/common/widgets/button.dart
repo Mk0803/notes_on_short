@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_on_short/utils/helpers/helper_functions.dart';
 
 class Button extends StatefulWidget {
   final String text;
@@ -15,9 +16,10 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
 
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
+
       onTapDown: (_) {
         // On button press, set the pressed state
         setState(() {
@@ -62,7 +64,7 @@ class _ButtonState extends State<Button> {
         child: Center(
           child: Text(
             widget.text,
-            style: const TextStyle(fontSize: 20, color: Colors.white),
+            style: TextStyle(fontSize: 20, color: HelperFunctions.isDarkMode(context)? Colors.black : Colors.white),
           ),
         ),
       ),

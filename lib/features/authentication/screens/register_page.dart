@@ -45,6 +45,14 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  ClipOval(
+                    child: Image.asset(
+                      'assets/icons/icon.png',
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   Text(
                     "Notes",
                     style: TextStyle(

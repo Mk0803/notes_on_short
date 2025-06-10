@@ -40,6 +40,15 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  ClipOval(
+                    child: Image.asset(
+                      'assets/icons/icon.png',
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     "Notes",
                     style: TextStyle(
@@ -50,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 30),
                   const Text(
                     "Login",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 25)
                   ),
                   const SizedBox(height: 10),
                   MyTextField(

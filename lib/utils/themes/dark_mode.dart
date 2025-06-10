@@ -8,7 +8,7 @@ ThemeData darkMode = ThemeData(
     scaffoldBackgroundColor: Color(0xff121212),
     colorScheme: ColorScheme.dark(
         surface: Color(0xff121212),
-        primary: Color(0xff4B96D6),
+        primary: Color(0xffffffff),
         secondary: Color(0xff5B94C9),
         tertiary: Color(0xffD6739F),
         inversePrimary: Color(0xff9173AB)

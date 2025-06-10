@@ -8,7 +8,7 @@ ThemeData lightMode = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   colorScheme: ColorScheme.light(
       surface: Color(0xffFFFFFF),
-      primary: Color(0xff70c5fa),
+      primary: Color(0xff282828),
       secondary: Color(0xffBDE0FE),
       tertiary: Color(0xffFFC8DD),
       inversePrimary: Color(0xffCDB4DB)
@@ -19,6 +19,7 @@ ThemeData lightMode = ThemeData(
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarContrastEnforced: false
     ),
   ),
 );
