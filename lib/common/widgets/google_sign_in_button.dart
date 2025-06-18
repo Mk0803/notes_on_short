@@ -7,25 +7,25 @@ class GoogleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme; // Access Theme's color scheme
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 80, // Square dimensions
+        height: 80,
         width: 80,
         decoration: BoxDecoration(
-          color: colorScheme.surface, // Background color from colorScheme
-          borderRadius: BorderRadius.circular(8), // Rounded corners
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2), // Shadow color
-              blurRadius: 8, // Slightly increased blur
-              offset: const Offset(0, 4), // Shadow offset
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0), // Adjust padding for better spacing
+          padding: const EdgeInsets.all(12.0),
           child: Image.asset(
             'assets/images/google_login.png',
             fit: BoxFit.contain,

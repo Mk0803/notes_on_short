@@ -17,7 +17,8 @@ class AuthPage extends StatelessWidget {
         stream: fireBaseAuth.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final notesRepository = Provider.of<NotesRepository>(context, listen: false);
+            final notesRepository =
+                Provider.of<NotesRepository>(context, listen: false);
             return ChangeNotifierProvider.value(
               value: notesRepository,
               child: const HomePage(),
@@ -25,7 +26,6 @@ class AuthPage extends StatelessWidget {
           } else {
             return const LoginOrRegisterPage();
           }
-        }
-    );
+        });
   }
 }

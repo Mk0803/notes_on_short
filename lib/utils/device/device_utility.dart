@@ -23,21 +23,20 @@ class DeviceUtils {
     final viewInsets = View.of(context).viewInsets;
     return viewInsets.bottom != 0;
   }
+
   static void setFullScreen(bool enable) {
-    SystemChrome.setEnabledSystemUIMode(enable ? SystemUiMode.immersive : SystemUiMode.edgeToEdge);
+    SystemChrome.setEnabledSystemUIMode(
+        enable ? SystemUiMode.immersive : SystemUiMode.edgeToEdge);
   }
 
-  // Get Screen Height
   double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
-  // Get Screen Width
   double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 
-  // Get Device Pixel Ratio
   double getPixelRatio(BuildContext context) {
     return MediaQuery.of(context).devicePixelRatio;
   }
@@ -52,7 +51,8 @@ class DeviceUtils {
   }
 
   static void showStatusBar() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
   }
 
   static Future<bool> hasInternetConnection() async {
@@ -64,16 +64,11 @@ class DeviceUtils {
     }
   }
 
-  static bool isIOS(){
+  static bool isIOS() {
     return Platform.isIOS;
   }
 
-  static bool isAndroid(){
+  static bool isAndroid() {
     return Platform.isAndroid;
   }
-
-
-
-
-
 }

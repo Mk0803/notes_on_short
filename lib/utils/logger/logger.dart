@@ -1,9 +1,8 @@
 import 'package:logger/logger.dart';
 
-// Create a singleton logger instance
 class AppLogger {
   static final Logger _logger = Logger(
-    printer: PrettyPrinter(), // Use PrettyPrinter for well-formatted logs
+    printer: PrettyPrinter(),
   );
 
   static void d(String message) => _logger.d(message); // Debug

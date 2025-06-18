@@ -57,10 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: colorScheme.primary),
                   ),
                   const SizedBox(height: 30),
-                  const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 25)
-                  ),
+                  const Text("Login", style: TextStyle(fontSize: 25)),
                   const SizedBox(height: 10),
                   MyTextField(
                     controller: userEmailController,

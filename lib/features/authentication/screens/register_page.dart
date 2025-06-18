@@ -23,8 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   final authService = AuthService();
-  
-  
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +83,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     isPassword: true,
                   ),
                   const SizedBox(height: 20),
-                  Button(text: "Register", onTap: () => EmailAuth().register(context, userEmailController, userPasswordController, userConfirmPasswordController)),
+                  Button(
+                      text: "Register",
+                      onTap: () => EmailAuth().register(
+                          context,
+                          userEmailController,
+                          userPasswordController,
+                          userConfirmPasswordController)),
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(12),
@@ -101,8 +105,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  GoogleSignInButton(onTap: () => GoogleAuth().signInWithGoogle(context)),
-                  
+                  GoogleSignInButton(
+                      onTap: () => GoogleAuth().signInWithGoogle(context)),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

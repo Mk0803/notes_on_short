@@ -29,7 +29,8 @@ void main() async {
         ChangeNotifierProvider.value(value: notesRepository),
         ChangeNotifierProvider<HomeController>(
           create: (context) => HomeController(
-            notesRepository: Provider.of<NotesRepository>(context, listen: false),
+            notesRepository:
+                Provider.of<NotesRepository>(context, listen: false),
           ),
         ),
       ],

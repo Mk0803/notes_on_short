@@ -2,27 +2,24 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 
-class HelperFunctions{
+class HelperFunctions {
   static String formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inDays == 0 && date.day == now.day) {
-      // Today - 12-hour format
       final hour = date.hour % 12 == 0 ? 12 : date.hour % 12;
       final minute = date.minute.toString().padLeft(2, '0');
       final period = date.hour >= 12 ? 'PM' : 'AM';
       return '$hour:$minute $period';
     } else if (difference.inDays <= 1 &&
-        DateTime(now.year, now.month, now.day - 1) == DateTime(date.year, date.month, date.day)) {
-      // Yesterday
+        DateTime(now.year, now.month, now.day - 1) ==
+            DateTime(date.year, date.month, date.day)) {
       return 'Yesterday';
     } else if (date.year == now.year) {
-      // Same year
       final month = _monthName(date.month);
       return '$month ${date.day}';
     } else {
-      // Previous years
       final month = _monthName(date.month);
       return '$month ${date.day}, ${date.year}';
     }
@@ -30,8 +27,18 @@ class HelperFunctions{
 
   static String _monthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[month - 1];
   }
@@ -79,31 +86,57 @@ class HelperFunctions{
   static Color getColorFromName(String colorName, bool isDarkMode) {
     switch (colorName.toLowerCase()) {
       case 'default':
-        return isDarkMode ? NotesColorsDark.notesDefault : NotesColorsLight.notesDefault;
+        return isDarkMode
+            ? NotesColorsDark.notesDefault
+            : NotesColorsLight.notesDefault;
       case 'coral':
-        return isDarkMode ? NotesColorsDark.notesCoral : NotesColorsLight.notesCoral;
+        return isDarkMode
+            ? NotesColorsDark.notesCoral
+            : NotesColorsLight.notesCoral;
       case 'peach':
-        return isDarkMode ? NotesColorsDark.notesPeach : NotesColorsLight.notesPeach;
+        return isDarkMode
+            ? NotesColorsDark.notesPeach
+            : NotesColorsLight.notesPeach;
       case 'sand':
-        return isDarkMode ? NotesColorsDark.notesSand : NotesColorsLight.notesSand;
+        return isDarkMode
+            ? NotesColorsDark.notesSand
+            : NotesColorsLight.notesSand;
       case 'mint':
-        return isDarkMode ? NotesColorsDark.notesMint : NotesColorsLight.notesMint;
+        return isDarkMode
+            ? NotesColorsDark.notesMint
+            : NotesColorsLight.notesMint;
       case 'sage':
-        return isDarkMode ? NotesColorsDark.notesSage : NotesColorsLight.notesSage;
+        return isDarkMode
+            ? NotesColorsDark.notesSage
+            : NotesColorsLight.notesSage;
       case 'fog':
-        return isDarkMode ? NotesColorsDark.notesFog : NotesColorsLight.notesFog;
+        return isDarkMode
+            ? NotesColorsDark.notesFog
+            : NotesColorsLight.notesFog;
       case 'storm':
-        return isDarkMode ? NotesColorsDark.notesStorm : NotesColorsLight.notesStorm;
+        return isDarkMode
+            ? NotesColorsDark.notesStorm
+            : NotesColorsLight.notesStorm;
       case 'dusk':
-        return isDarkMode ? NotesColorsDark.notesDusk : NotesColorsLight.notesDusk;
+        return isDarkMode
+            ? NotesColorsDark.notesDusk
+            : NotesColorsLight.notesDusk;
       case 'blossom':
-        return isDarkMode ? NotesColorsDark.notesBlossom : NotesColorsLight.notesBlossom;
+        return isDarkMode
+            ? NotesColorsDark.notesBlossom
+            : NotesColorsLight.notesBlossom;
       case 'clay':
-        return isDarkMode ? NotesColorsDark.notesClay : NotesColorsLight.notesClay;
+        return isDarkMode
+            ? NotesColorsDark.notesClay
+            : NotesColorsLight.notesClay;
       case 'chalk':
-        return isDarkMode ? NotesColorsDark.notesChalk : NotesColorsLight.notesChalk;
+        return isDarkMode
+            ? NotesColorsDark.notesChalk
+            : NotesColorsLight.notesChalk;
       default:
-        return isDarkMode ? NotesColorsDark.notesChalk : NotesColorsLight.notesWhite;
+        return isDarkMode
+            ? NotesColorsDark.notesChalk
+            : NotesColorsLight.notesWhite;
     }
   }
 }

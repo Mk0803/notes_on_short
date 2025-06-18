@@ -10,27 +10,23 @@ class GoogleAuth {
   Future<UserCredential?> signInWithGoogle(BuildContext context) async {
     try {
       await GoogleSignIn().signOut();
-
       _showLoading(context);
-
       final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
       if (gUser == null) {
         Navigator.pop(context);
         return null;
       }
-
       final GoogleSignInAuthentication gAuth = await gUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: gAuth.accessToken,
         idToken: gAuth.idToken,
       );
-
       final userCredential = await _auth.signInWithCredential(credential);
       Navigator.pop(context);
       return userCredential;
     } catch (e) {
       Navigator.pop(context);
-      ErrorMessage.errorMessage("Google Sign-In Failed: $e", context);
+      ErrorMessage.show(context,"Google Sign-In Failed!");
       return null;
     }
   }

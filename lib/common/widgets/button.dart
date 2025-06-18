@@ -4,30 +4,26 @@ import 'package:notes_on_short/utils/helpers/helper_functions.dart';
 class Button extends StatefulWidget {
   final String text;
   final void Function()? onTap;
+
   const Button({super.key, required this.text, required this.onTap});
 
   @override
   State<Button> createState() => _ButtonState();
 }
 
-
 class _ButtonState extends State<Button> {
-  bool _isPressed = false; // Track the button press state
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
-
       onTapDown: (_) {
-        // On button press, set the pressed state
         setState(() {
           _isPressed = true;
         });
       },
       onTapUp: (_) {
-        // Reset the pressed state and execute the onTap callback
         setState(() {
           _isPressed = false;
         });
@@ -36,7 +32,6 @@ class _ButtonState extends State<Button> {
         }
       },
       onTapCancel: () {
-        // Reset the pressed state if the gesture is canceled
         setState(() {
           _isPressed = false;
         });
@@ -46,7 +41,7 @@ class _ButtonState extends State<Button> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: _isPressed
-              ? colorScheme.primary.withOpacity(0.8) // Darker shade on press
+              ? colorScheme.primary.withOpacity(0.8)
               : colorScheme.primary,
           borderRadius: BorderRadius.circular(10),
           boxShadow: _isPressed
@@ -64,7 +59,11 @@ class _ButtonState extends State<Button> {
         child: Center(
           child: Text(
             widget.text,
-            style: TextStyle(fontSize: 20, color: HelperFunctions.isDarkMode(context)? Colors.black : Colors.white),
+            style: TextStyle(
+                fontSize: 20,
+                color: HelperFunctions.isDarkMode(context)
+                    ? Colors.black
+                    : Colors.white),
           ),
         ),
       ),

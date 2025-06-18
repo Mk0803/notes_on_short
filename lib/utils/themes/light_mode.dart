@@ -11,15 +11,13 @@ ThemeData lightMode = ThemeData(
       primary: Color(0xff282828),
       secondary: Color(0xffBDE0FE),
       tertiary: Color(0xffFFC8DD),
-      inversePrimary: Color(0xffCDB4DB)
-  ),
+      inversePrimary: Color(0xffCDB4DB)),
   appBarTheme: AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarContrastEnforced: false
-    ),
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false),
   ),
 );
