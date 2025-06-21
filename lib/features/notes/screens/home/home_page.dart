@@ -8,6 +8,7 @@ import 'package:notes_on_short/utils/constants/colors.dart';
 import 'package:notes_on_short/utils/helpers/helper_functions.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/widgets/notes_bottom_app_bar.dart';
+import '../../models/note.dart';
 import 'home_view.dart';
 import '../create_note_screen.dart';
 import '../settings_page.dart';
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage>
             preferredSize: const Size.fromHeight(40.0),
             child: AppBar(
               title: Text(
-                _getAppBarTitle(homeController.selectedIndex),
+                _getAppBarTitle(homeController.selectedIndex, homeController),
                 style: TextStyle(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -148,7 +149,11 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  String _getAppBarTitle(int index) {
+  String _getAppBarTitle(int index, HomeController homeController) {
+    if (homeController.isSelectionMode) {
+      return '${homeController.selectedCount} selected';
+    }
+
     switch (index) {
       case 0:
         return 'Notes';
@@ -164,6 +169,34 @@ class _HomePageState extends State<HomePage>
   List<Widget> _buildAppBarActions(
       HomeController homeController, NotesRepository notesRepository) {
     if (homeController.selectedIndex == 2) return [];
+
+    // Show selection actions when in selection mode
+    if (homeController.isSelectionMode) {
+      return [
+        IconButton(
+          onPressed: () => _selectAllNotes(homeController, notesRepository),
+          icon: const Icon(Icons.select_all),
+          tooltip: 'Select All',
+        ),
+        IconButton(
+          onPressed: () => _batchStarNotes(homeController, notesRepository),
+          icon: homeController.areAllSelectedStarred()? Icon(Icons.star): Icon(Icons.star_border),
+          tooltip: 'Star Selected',
+        ),
+        IconButton(
+          onPressed: () => _batchDeleteNotes(homeController, notesRepository),
+          icon: const Icon(Icons.delete),
+          tooltip: 'Delete Selected',
+        ),
+        IconButton(
+          onPressed: () => homeController.exitSelectionMode(),
+          icon: const Icon(Icons.close),
+          tooltip: 'Cancel Selection',
+        ),
+      ];
+    }
+
+    // Normal mode actions
     return [
       IconButton(
         onPressed: () {
@@ -288,8 +321,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildHomePage(
-      HomeController homeController, NotesRepository notesRepository) {
+  Widget _buildHomePage(HomeController homeController, NotesRepository notesRepository) {
     return HomeView(
       notes: notesRepository.notes,
       isLoading: homeController.isLoading && !notesRepository.isDataLoaded,
@@ -298,11 +330,15 @@ class _HomePageState extends State<HomePage>
       },
       scrollController: _scrollController,
       showEmptyState: _getEmptyStateMessage(notesRepository),
+      // Add selection parameters
+      isSelectionMode: homeController.isSelectionMode,
+      selectedNoteIds: homeController.selectedNoteIds,
+      onNoteLongPress: (noteId) => homeController.enterSelectionMode(noteId),
+      onNoteSelectionToggle: (noteId) => homeController.toggleNoteSelection(noteId),
     );
   }
 
-  Widget _buildStarredPage(
-      HomeController homeController, NotesRepository notesRepository) {
+  Widget _buildStarredPage(HomeController homeController, NotesRepository notesRepository) {
     return HomeView(
       notes: notesRepository.starredNotes,
       isLoading: homeController.isLoading && !notesRepository.isDataLoaded,
@@ -311,6 +347,11 @@ class _HomePageState extends State<HomePage>
       },
       scrollController: _scrollController,
       showEmptyState: _buildStarredEmptyState(),
+      // Add selection parameters
+      isSelectionMode: homeController.isSelectionMode,
+      selectedNoteIds: homeController.selectedNoteIds,
+      onNoteLongPress: (noteId) => homeController.enterSelectionMode(noteId),
+      onNoteSelectionToggle: (noteId) => homeController.toggleNoteSelection(noteId),
     );
   }
 
@@ -643,6 +684,13 @@ class _HomePageState extends State<HomePage>
     return availableColors;
   }
 
+  void _selectAllNotes(HomeController homeController, NotesRepository notesRepository) {
+    final currentNotes = homeController.selectedIndex == 0
+        ? notesRepository.notes
+        : notesRepository.starredNotes;
+    homeController.selectAllNotes(currentNotes);
+  }
+
   Color _getColorFromName(String colorName) {
     final isDark = HelperFunctions.isDarkMode(context);
 
@@ -686,6 +734,103 @@ class _HomePageState extends State<HomePage>
     } catch (e) {
       // Return default color if not found
       return isDark ? NotesColorsDark.notesDefault : NotesColorsLight.notesDefault;
+    }
+  }
+
+  Future<void> _batchStarNotes(HomeController homeController, NotesRepository notesRepository) async {
+    final selectedIds = homeController.selectedNoteIds.toList();
+    final selectedNotes = selectedIds
+        .map((id) => notesRepository.getNoteById(id))
+        .where((note) => note != null)
+        .cast<Note>()
+        .toList();
+
+    if (selectedNotes.isEmpty) return;
+
+    // Check if all selected notes are already starred
+    final allStarred = selectedNotes.every((note) => note.isStarred);
+
+    String action;
+    bool newStarredState;
+
+    if (allStarred) {
+      // All are starred - unstar them
+      action = 'unstar';
+      newStarredState = false;
+    } else {
+      // Some or none are starred - star all
+      action = 'star';
+      newStarredState = true;
+    }
+
+    // Apply the star/unstar action and wait for all updates to complete
+    for (final note in selectedNotes) {
+      if (note.isStarred != newStarredState) {
+        final updatedNote = Note();
+        updatedNote.id = note.id;
+        updatedNote.title = note.title;
+        updatedNote.content = note.content;
+        updatedNote.isStarred = newStarredState;
+        updatedNote.lastModified = DateTime.now();
+        updatedNote.noteColor = note.noteColor;
+        updatedNote.isSynced = false;
+        updatedNote.created = note.created;
+
+        // Wait for the update to complete
+        await notesRepository.updateNote(updatedNote);
+      }
+    }
+
+    // Exit selection mode after all updates are complete
+    homeController.exitSelectionMode();
+
+    if (mounted) {
+      final count = selectedNotes.where((note) => note.isStarred != newStarredState).length;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${count} note(s) ${action}red'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<void> _batchDeleteNotes(HomeController homeController, NotesRepository notesRepository) async {
+    final selectedIds = homeController.selectedNoteIds.toList();
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Notes'),
+        content: Text('Are you sure you want to delete ${selectedIds.length} note(s)?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete ?? false) {
+      for (final noteId in selectedIds) {
+        await notesRepository.deleteNote(noteId);
+      }
+      homeController.exitSelectionMode();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${selectedIds.length} note(s) deleted'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 

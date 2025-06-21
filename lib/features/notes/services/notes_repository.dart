@@ -14,7 +14,7 @@ class NotesRepository extends ChangeNotifier {
 
   bool _isSyncing = false;
   String _searchQuery = '';
-  String _colorFilter = ''; // Add color filter
+  String _colorFilter = '';
   bool _isDataLoaded = false;
 
   List<Note> get notes =>
@@ -49,7 +49,7 @@ class NotesRepository extends ChangeNotifier {
     try {
       _notes = await _isarService.getNotes();
       _isDataLoaded = true;
-      _updateStarredNotes();
+      updateStarredNotes();
 
       if (_searchQuery.isNotEmpty || _colorFilter.isNotEmpty) {
         _performFiltering();
@@ -72,7 +72,7 @@ class NotesRepository extends ChangeNotifier {
   Future<void> addNote(Note note) async {
     note.isSynced = false;
     _notes.insert(0, note);
-    _updateStarredNotes();
+    updateStarredNotes();
     if (_searchQuery.isNotEmpty || _colorFilter.isNotEmpty) {
       _performFiltering();
     }
@@ -87,12 +87,17 @@ class NotesRepository extends ChangeNotifier {
       note.title = updatedNote.title;
       note.content = updatedNote.content;
       note.lastModified = updatedNote.lastModified;
-      note.noteColor = updatedNote.noteColor; // Update color
+      note.noteColor = updatedNote.noteColor;
+      note.isStarred = updatedNote.isStarred; // Make sure this is included
       note.isSynced = false;
-      _updateStarredNotes();
+
+      // Update starred notes after the main note is updated
+      updateStarredNotes();
+
       if (_searchQuery.isNotEmpty || _colorFilter.isNotEmpty) {
         _performFiltering();
       }
+
       notifyListeners();
     }
     _updateNoteInDatabase(updatedNote);
@@ -103,7 +108,7 @@ class NotesRepository extends ChangeNotifier {
 
     if (index != -1) {
       _notes.removeAt(index);
-      _updateStarredNotes();
+      updateStarredNotes();
       if (_searchQuery.isNotEmpty || _colorFilter.isNotEmpty) {
         _performFiltering();
       }
@@ -229,7 +234,7 @@ class NotesRepository extends ChangeNotifier {
           ? a.created.compareTo(b.created)
           : b.created.compareTo(a.created));
     }
-    _updateStarredNotes();
+    updateStarredNotes();
     notifyListeners();
   }
 
@@ -240,7 +245,7 @@ class NotesRepository extends ChangeNotifier {
       _filteredNotes.sort((a, b) =>
       ascending ? a.title.compareTo(b.title) : b.title.compareTo(a.title));
     }
-    _updateStarredNotes();
+    updateStarredNotes();
     notifyListeners();
   }
 
@@ -251,8 +256,9 @@ class NotesRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _updateStarredNotes() {
+  void updateStarredNotes() {
     _starredNotes = _notes.where((note) => note.isStarred).toList();
+    notifyListeners();
   }
 
   Future<void> refreshNotes({BuildContext? context}) async {
@@ -303,7 +309,7 @@ class NotesRepository extends ChangeNotifier {
           .toList();
       if (newNotes.isNotEmpty) {
         _notes.addAll(newNotes);
-        _updateStarredNotes();
+        updateStarredNotes();
         if (_searchQuery.isNotEmpty || _colorFilter.isNotEmpty) {
           _performFiltering();
         }
