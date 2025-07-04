@@ -29,4 +29,112 @@ This project demonstrates clean architecture, efficient state management, and in
 
 ---
 
-## 📂 Project Structure (Simplified)
+## 📂 Project Structure
+
+```plaintext
+lib/
+│
+├── common/                     # Reusable Components & Styles
+│   ├── styles/
+│   └── widgets/
+│
+├── data/                       # Data Layer
+│   ├── repositories/
+│   └── services/
+│
+├── features/                   # Feature Modules (Feature-first Structure)
+│   ├── authentication/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   └── screens/
+│   │
+│   └── notes/
+│       ├── controllers/
+│       ├── models/
+│       ├── screens/
+│       ├── services/
+│       └── widgets/
+│
+├── utils/                      # Utilities & Helpers
+│   ├── constants/
+│   ├── device/
+│   ├── helpers/
+│   ├── logger/
+│   └── themes/
+│
+└── main.dart                   # App Entry Point
+
+```
+
+## 📲 Installation & Setup
+> ⚠️ This is a personal project for learning and portfolio purposes, not intended for production use.
+> ### Prerequisites
+
+- Flutter SDK (latest stable version)
+- Dart SDK
+- Android Studio / VS Code
+- Firebase account
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/your-repo.git
+```
+
+2. **Navigate to the project folder**
+```bash
+cd your-repo
+```
+
+3. **Fetch project dependencies**
+```bash
+flutter pub get
+```
+
+4. **Configure Firebase**
+- Add your `google-services.json` (for Android) to `android/app/`
+- Add your `GoogleService-Info.plist` (for iOS) to `ios/Runner/`
+- Ensure Firebase is properly set up in your Firebase Console for Firestore
+
+5. **Run the application**
+```bash
+flutter run
+```
+
+## 🧪 Testing
+
+Run the test suite to ensure everything is working correctly:
+
+```bash
+flutter test
+```
+
+## 🌱 Future Improvements
+
+- [ ] Automatic Cloud Sync in Background
+- [ ] Cloud Conflict Resolution Strategies
+- [ ] UI/UX Enhancements
+- [ ] Multi-Device Syncing Support
+
+## 📜 License
+
+This project is built for educational and portfolio purposes only.
+
+## 🎯 Purpose
+
+This project showcases my ability to:
+
+- Build scalable and maintainable Flutter applications
+- Implement both local and cloud storage solutions
+- Apply advanced state management techniques
+- Architect apps following clean, modular principles
+
+## 📸 Screenshots
+
+*(Add screenshots of key screens here for extra impact.)*
+
+---
+
+*Built with ❤️ using Flutter*
+
+
+
