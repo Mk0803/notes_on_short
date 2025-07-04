@@ -127,28 +127,27 @@ This project showcases my ability to:
 - Implement both local and cloud storage solutions
 - Apply advanced state management techniques
 - Architect apps following clean, modular principles
-
 ## 📸 Screenshots
 
 ### 📝 Notes App Screenshots
 
 #### Home Screen
-![Home Screen](assets/screenshots/notes1.jpg)
+<img src="assets/screenshots/notes1.jpg" width="250">
 
-#### Create/Edit Note
-![Create/Edit Note](assets/screenshots/notes2.jpg)
+#### Starred Screen
+<img src="assets/screenshots/notes2.jpg" width="250">
 
-#### Color Coded Notes
-![Color Coded Notes](assets/screenshots/notes3.jpg)
+#### Search and Filter
+<img src="assets/screenshots/notes3.jpg" width="250">
 
-#### Search Notes
-![Search Notes](assets/screenshots/notes4.jpg)
+#### Filter Notes
+<img src="assets/screenshots/notes4.jpg" width="250">
 
-#### Filter by Color
-![Filter by Color](assets/screenshots/notes5.jpg)
+#### Create Note Screen
+<img src="assets/screenshots/notes5.jpg" width="250">
 
-#### Starred Notes
-![Starred Notes](assets/screenshots/notes6.jpg)
+#### Edit Note Screen
+<img src="assets/screenshots/notes6.jpg" width="250">
 
 
 ---
