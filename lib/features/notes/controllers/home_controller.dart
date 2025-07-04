@@ -38,6 +38,16 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void reset() {
+    _isLoading = true;
+    _selectedIndex = 0;
+    _isSearchActive = false;
+    _isSelectionMode = false;
+    _selectedNoteIds.clear();
+    notifyListeners();
+    debugPrint("HomeController reset");
+  }
+
   Future<void> syncNotes() async {
     try {
       await notesRepository.syncNotes();

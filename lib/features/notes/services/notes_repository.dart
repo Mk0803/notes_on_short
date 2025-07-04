@@ -28,6 +28,12 @@ class NotesRepository extends ChangeNotifier {
   bool get hasActiveFilters => _searchQuery.isNotEmpty || _colorFilter.isNotEmpty; // Add getter for active filters
   bool get isDataLoaded => _isDataLoaded;
 
+  set isDataLoaded(bool value) {
+    _isDataLoaded = value;
+    notifyListeners();
+    debugPrint("isDataLoaded: $_isDataLoaded");
+  }
+
   Future<void> initialize() async {
     await IsarService.initialize();
   }
@@ -155,7 +161,8 @@ class NotesRepository extends ChangeNotifier {
     if (_isDataLoaded) {
       return _notes;
     } else {
-      return await _isarService.getNotes();
+      await loadNotes();
+      return _notes;
     }
   }
 
@@ -326,6 +333,7 @@ class NotesRepository extends ChangeNotifier {
   Future<void> ensureDataLoaded({BuildContext? context}) async {
     if (!_isDataLoaded) {
       await loadNotesFromDatabase(context: context);
+      notifyListeners();
     }
   }
 
@@ -334,5 +342,22 @@ class NotesRepository extends ChangeNotifier {
     final colors = _notes.map((note) => note.noteColor).toSet().toList();
     colors.sort();
     return colors;
+  }
+
+  void clearAllData() {
+    _notes.clear();
+    _filteredNotes.clear();
+    _starredNotes.clear();
+    _searchQuery = '';
+    _colorFilter = '';
+    _isDataLoaded = false;
+    _isSyncing = false;
+    notifyListeners();
+    debugPrint("All data cleared - Repository reset");
+  }
+
+  Future<void> forceLoadNotes({BuildContext? context}) async {
+    debugPrint("Force loading notes...");
+    await loadNotesFromDatabase(context: context);
   }
 }

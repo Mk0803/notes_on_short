@@ -20,7 +20,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final notesRepository = NotesRepository();
   await notesRepository.initialize();
-  notesRepository.pullMissingCloudNotes();
+  await notesRepository.pullMissingCloudNotes();
 
   runApp(
     MultiProvider(

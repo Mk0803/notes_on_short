@@ -1,6 +1,5 @@
 import 'package:isar/isar.dart';
 import 'package:notes_on_short/features/notes/models/note.dart';
-import 'package:notes_on_short/utils/logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 class IsarService {

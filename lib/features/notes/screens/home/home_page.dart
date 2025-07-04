@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _notesRepository.ensureDataLoaded().then((_) {
-        if (_homeController.isLoading) {
+        if (_homeController.isLoading || !_notesRepository.isDataLoaded) {
           _homeController.loadNotes();
         }
       });

@@ -42,6 +42,12 @@ class FirestoreService {
         'title': note.title,
         'content': note.content,
         'lastUpdated': note.lastModified.toIso8601String(),
+        'isSynced': true,
+        'noteColor': note.noteColor,
+        'isStarred': note.isStarred,
+        'created': note.created.toIso8601String(),
+
+
       });
     }
   }
@@ -61,6 +67,7 @@ class FirestoreService {
 
   Future<List<Note>> getCloudNotes() async {
     if (!await canSync()) return [];
+
     final userId = currentUserId!;
     try {
       final cloudSnapshot = await _fireStore
@@ -68,16 +75,23 @@ class FirestoreService {
           .doc(userId)
           .collection('notes')
           .get();
+
       return cloudSnapshot.docs.map((doc) {
+        final data = doc.data();
+
         return Note()
           ..id = int.parse(doc.id)
-          ..title = doc['title']
-          ..content = doc['content']
-          ..lastModified = DateTime.parse(doc['lastUpdated'])
+          ..title = data['title'] ?? ''
+          ..content = data['content']
+          ..noteColor = data['noteColor'] ?? 'default' 
+          ..created = DateTime.tryParse(data['created'] ?? '') ?? DateTime.now()
+          ..lastModified = DateTime.tryParse(data['lastUpdated'] ?? '') ?? DateTime.now()
+          ..isStarred = data['isStarred'] ?? false
           ..isSynced = true;
       }).toList();
     } catch (e) {
       return [];
     }
   }
+
 }
