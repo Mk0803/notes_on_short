@@ -1,16 +1,32 @@
-# notes_on_short
+# 📝 Notes On Short - Flutter Notes App
 
-A new Flutter project.
+**Notes On Short** is a comprehensive, cross-platform notes application developed using **Flutter**. It allows users to efficiently create, organize, and manage notes with advanced features like color coding, note searching, and filtering.
 
-## Getting Started
+This project demonstrates clean architecture, efficient state management, and integration of both local and cloud storage solutions.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Features
+- ✅ **Create, Edit & Delete Notes**
+- ✅ **Local Storage using Isar Database (Fast & Offline-First)**
+- ✅ **Manual Cloud Sync via Firebase Firestore**
+- ✅ **Starred Notes for Quick Access**
+- ✅ **Color Coded Notes for Easy Organization**
+- ✅ **Search Notes by Title or Content**
+- ✅ **Filter Notes by Color Tags**
+- ✅ **Cross-Platform:** Android & iOS
+- ✅ **Responsive UI**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🏗️ Architecture & Tech Stack
+- **Flutter** (Dart) - Cross-platform UI framework
+- **Isar Database** - Local, NoSQL, high-performance storage
+- **Firebase Firestore** - Cloud database for manual sync
+- **Provider** - State Management
+- **Feature Folder Architecture + MVC Pattern**
+  - Organized, scalable project structure for ease of maintenance.
+
+---
+
+## 📂 Project Structure (Simplified)
