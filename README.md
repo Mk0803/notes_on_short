@@ -130,7 +130,26 @@ This project showcases my ability to:
 
 ## 📸 Screenshots
 
-*(Add screenshots of key screens here for extra impact.)*
+### 📝 Notes App Screenshots
+
+#### Home Screen
+![Home Screen](assets/screenshots/notes1.jpg)
+
+#### Create/Edit Note
+![Create/Edit Note](assets/screenshots/notes2.jpg)
+
+#### Color Coded Notes
+![Color Coded Notes](assets/screenshots/notes3.jpg)
+
+#### Search Notes
+![Search Notes](assets/screenshots/notes4.jpg)
+
+#### Filter by Color
+![Filter by Color](assets/screenshots/notes5.jpg)
+
+#### Starred Notes
+![Starred Notes](assets/screenshots/notes6.jpg)
+
 
 ---
 
