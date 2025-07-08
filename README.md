@@ -32,37 +32,101 @@ This project demonstrates clean architecture, efficient state management, and in
 ## 📂 Project Structure
 
 ```plaintext
+.vscode/
+    └── settings.json
+
+android/
+    ├── app/
+        ├── src/
+            ├── main/
+                ├── kotlin/
+                    └── com/
+                        └── example/
+                            └── notes_on_short/
+                                └── MainActivity.kt
+                ├── res/
+                    └── values/
+                        ├── colors.xml
+                        └── styles.xml
+                └── AndroidManifest.xml
+        ├── build.gradle
+        └── google-services.json
+    ├── gradle/
+        └── wrapper/
+            └── gradle-wrapper.properties
+    ├── build.gradle
+    ├── gradle.properties
+    └── settings.gradle
+
+ios/
+    ├── Runner/
+        ├── AppDelegate.swift
+        ├── Info.plist
+    └── Runner.xcodeproj/
+        └── project.pbxproj
+
 lib/
-│
-├── common/                     # Reusable Components & Styles
-│   ├── styles/
-│   └── widgets/
-│
-├── data/                       # Data Layer
-│   ├── repositories/
-│   └── services/
-│
-├── features/                   # Feature Modules (Feature-first Structure)
-│   ├── authentication/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   └── screens/
-│   │
-│   └── notes/
-│       ├── controllers/
-│       ├── models/
-│       ├── screens/
-│       ├── services/
-│       └── widgets/
-│
-├── utils/                      # Utilities & Helpers
-│   ├── constants/
-│   ├── device/
-│   ├── helpers/
-│   ├── logger/
-│   └── themes/
-│
-└── main.dart                   # App Entry Point
+    ├── common/
+        └── widgets/
+            ├── button.dart
+            ├── confirmation_dialog.dart
+            ├── google_sign_in_button.dart
+            ├── notes_bottom_app_bar.dart
+            └── text_field.dart
+    ├── data/
+        └── services/
+            └── firebase_options.dart
+    ├── features/
+        ├── authentication/
+            ├── controllers/
+                ├── auth_service.dart
+                ├── email_auth.dart
+                ├── google_auth.dart
+                └── login_or_register_page.dart
+            └── screens/
+                ├── auth_page.dart
+                ├── login_page.dart
+                └── register_page.dart
+        └── notes/
+            ├── controllers/
+                └── home_controller.dart
+            ├── models/
+                ├── note.dart
+                └── note.g.dart
+            ├── screens/
+                ├── home/
+                    ├── home_page.dart
+                    └── home_view.dart
+                ├── create_note_screen.dart
+                ├── note_editing_screen.dart
+                └── settings_page.dart
+            ├── services/
+                ├── firestore_service.dart
+                ├── isar_service.dart
+                └── notes_repository.dart
+            └── widgets/
+                ├── color_picker.dart
+                ├── note_card.dart
+                └── sync_button.dart
+    ├── utils/
+        ├── constants/
+            ├── colors.dart
+            ├── image_strings.dart
+            └── sizes.dart
+        ├── helpers/
+            └── helper_functions.dart
+        ├── themes/
+            ├── dark_mode.dart
+            ├── light_mode.dart
+            └── theme_provider.dart
+    └── main.dart
+
+pubspec.yaml
+pubspec.lock
+README.md
+.gitignore
+firebase.json
+
 
 ```
 
@@ -132,22 +196,33 @@ This project showcases my ability to:
 ### 📝 Notes App Screenshots
 
 #### Home Screen
+
 <img src="assets/screenshots/notes1.jpg" width="250">
 
 #### Starred Screen
+
 <img src="assets/screenshots/notes2.jpg" width="250">
 
 #### Search and Filter
+
 <img src="assets/screenshots/notes3.jpg" width="250">
 
 #### Filter Notes
+
 <img src="assets/screenshots/notes4.jpg" width="250">
 
 #### Create Note Screen
+
 <img src="assets/screenshots/notes5.jpg" width="250">
 
 #### Edit Note Screen
+
 <img src="assets/screenshots/notes6.jpg" width="250">
+
+### Selecting Notes
+
+<img src="assets/screenshots/notes7.jpg" width="250">
+
 
 
 ---
